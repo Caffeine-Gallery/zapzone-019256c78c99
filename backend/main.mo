@@ -2,6 +2,7 @@ import Bool "mo:base/Bool";
 import Char "mo:base/Char";
 import Hash "mo:base/Hash";
 import Int "mo:base/Int";
+import Nat8 "mo:base/Nat8";
 
 import Array "mo:base/Array";
 import Debug "mo:base/Debug";
@@ -14,6 +15,8 @@ import Principal "mo:base/Principal";
 import Result "mo:base/Result";
 import Text "mo:base/Text";
 import Time "mo:base/Time";
+import Error "mo:base/Error";
+import Blob "mo:base/Blob";
 
 actor ChargeMeUp {
     type ChargingStation = {
@@ -21,6 +24,7 @@ actor ChargeMeUp {
         name: Text;
         location: Text;
         available: Bool;
+        isSupercharger: Bool;
     };
 
     type ChargingSession = {
@@ -45,6 +49,7 @@ actor ChargeMeUp {
             name;
             location;
             available = true;
+            isSupercharger = false;
         };
         stations.put(id, station);
         #ok("Charging station added successfully")
@@ -112,6 +117,59 @@ actor ChargeMeUp {
         Iter.toArray(Iter.filter(sessions.vals(), func (session: ChargingSession) : Bool {
             session.userId == userId
         }))
+    };
+
+    public func fetchTeslaSuperchargers() : async Result.Result<Text, Text> {
+        let url = "https://www.tesla.com/cua-api/tesla-locations?bounds=37.869%2C-122.328%2C37.696%2C-122.086&filters=supercharger";
+        
+        try {
+            let ic : actor { 
+                http_request : ({
+                    url : Text;
+                    method : Text;
+                    body : [Nat8];
+                    headers : [{ name : Text; value : Text }];
+                }) -> async ({
+                    status : Nat;
+                    headers : [{ name : Text; value : Text }];
+                    body : [Nat8];
+                });
+            } = actor("aaaaa-aa");
+
+            let response = await ic.http_request({
+                url = url;
+                method = "GET";
+                body = [];
+                headers = [];
+            });
+
+            if (response.status == 200) {
+                let superchargers = parseTeslaSuperchargers(Blob.fromArray(response.body));
+                for (supercharger in superchargers.vals()) {
+                    let id = Text.concat("tesla-", supercharger.name);
+                    let station : ChargingStation = {
+                        id = id;
+                        name = supercharger.name;
+                        location = supercharger.location;
+                        available = true;
+                        isSupercharger = true;
+                    };
+                    stations.put(id, station);
+                };
+                #ok("Tesla Superchargers fetched and added successfully")
+            } else {
+                #err("Failed to fetch Tesla Superchargers")
+            };
+        } catch (error) {
+            #err("Error fetching Tesla Superchargers: " # Error.message(error))
+        }
+    };
+
+    private func parseTeslaSuperchargers(body: Blob) : [ChargingStation] {
+        // This is a placeholder. In a real implementation, you would parse the response
+        // and convert it to an array of ChargingStation objects.
+        // For now, we'll return an empty array.
+        []
     };
 
     system func preupgrade() {

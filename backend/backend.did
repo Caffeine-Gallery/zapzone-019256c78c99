@@ -13,6 +13,7 @@ type ChargingStation =
  record {
    available: bool;
    id: text;
+   isSupercharger: bool;
    location: text;
    name: text;
  };
@@ -27,6 +28,7 @@ type ChargingSession =
  };
 service : {
   addChargingStation: (text, text) -> (Result_1);
+  fetchTeslaSuperchargers: () -> (Result_1);
   getChargingHistory: (principal) -> (vec ChargingSession) query;
   getChargingStations: () -> (vec ChargingStation) query;
   startChargingSession: (text) -> (Result_1);

@@ -67,3 +67,11 @@ li {
 li button {
     margin-left: 1rem;
 }
+
+#fetch-superchargers-btn {
+    background-color: #d32f2f;
+}
+
+#fetch-superchargers-btn:hover {
+    background-color: #b71c1c;
+}

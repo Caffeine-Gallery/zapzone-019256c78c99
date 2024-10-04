@@ -12,6 +12,7 @@ export interface ChargingSession {
 }
 export interface ChargingStation {
   'id' : string,
+  'isSupercharger' : boolean,
   'name' : string,
   'available' : boolean,
   'location' : string,
@@ -23,6 +24,7 @@ export type Result_1 = { 'ok' : string } |
 export type Time = bigint;
 export interface _SERVICE {
   'addChargingStation' : ActorMethod<[string, string], Result_1>,
+  'fetchTeslaSuperchargers' : ActorMethod<[], Result_1>,
   'getChargingHistory' : ActorMethod<[Principal], Array<ChargingSession>>,
   'getChargingStations' : ActorMethod<[], Array<ChargingStation>>,
   'startChargingSession' : ActorMethod<[string], Result_1>,

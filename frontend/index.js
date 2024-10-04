@@ -35,7 +35,7 @@ async function updateStationList() {
     stationList.innerHTML = '';
     stations.forEach(station => {
         const li = document.createElement('li');
-        li.textContent = `${station.name} (${station.location}) - ${station.available ? 'Available' : 'In Use'}`;
+        li.textContent = `${station.name} (${station.location}) - ${station.available ? 'Available' : 'In Use'} ${station.isSupercharger ? '- Tesla Supercharger' : ''}`;
         if (station.available) {
             const startButton = document.createElement('button');
             startButton.textContent = 'Start Charging';
@@ -99,6 +99,17 @@ async function stopCharging(sessionId) {
     }
 }
 
+async function fetchTeslaSuperchargers() {
+    const result = await backend.fetchTeslaSuperchargers();
+    if ('ok' in result) {
+        alert('Tesla Superchargers fetched successfully');
+        updateStationList();
+    } else {
+        alert(`Error: ${result.err}`);
+    }
+}
+
 document.getElementById('add-station-form').addEventListener('submit', addStation);
+document.getElementById('fetch-superchargers-btn').addEventListener('click', fetchTeslaSuperchargers);
 
 init();

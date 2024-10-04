@@ -11,6 +11,7 @@ export const idlFactory = ({ IDL }) => {
   });
   const ChargingStation = IDL.Record({
     'id' : IDL.Text,
+    'isSupercharger' : IDL.Bool,
     'name' : IDL.Text,
     'available' : IDL.Bool,
     'location' : IDL.Text,
@@ -18,6 +19,7 @@ export const idlFactory = ({ IDL }) => {
   const Result = IDL.Variant({ 'ok' : IDL.Float64, 'err' : IDL.Text });
   return IDL.Service({
     'addChargingStation' : IDL.Func([IDL.Text, IDL.Text], [Result_1], []),
+    'fetchTeslaSuperchargers' : IDL.Func([], [Result_1], []),
     'getChargingHistory' : IDL.Func(
         [IDL.Principal],
         [IDL.Vec(ChargingSession)],
