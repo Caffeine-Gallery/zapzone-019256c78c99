@@ -1,0 +1,34 @@
+type Time = int;
+type Result_1 = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: float64;
+ };
+type ChargingStation = 
+ record {
+   available: bool;
+   id: text;
+   location: text;
+   name: text;
+ };
+type ChargingSession = 
+ record {
+   endTime: opt Time;
+   energyConsumed: opt float64;
+   id: text;
+   startTime: Time;
+   stationId: text;
+   userId: principal;
+ };
+service : {
+  addChargingStation: (text, text) -> (Result_1);
+  getChargingHistory: (principal) -> (vec ChargingSession) query;
+  getChargingStations: () -> (vec ChargingStation) query;
+  startChargingSession: (text) -> (Result_1);
+  stopChargingSession: (text) -> (Result);
+}

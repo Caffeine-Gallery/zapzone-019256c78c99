@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChargeMeUp</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <header>
+        <h1>ChargeMeUp</h1>
+    </header>
+    <main>
+        <section id="add-station">
+            <h2>Add Charging Station</h2>
+            <form id="add-station-form">
+                <input type="text" id="station-name" placeholder="Station Name" required>
+                <input type="text" id="station-location" placeholder="Location" required>
+                <button type="submit">Add Station</button>
+            </form>
+        </section>
+        <section id="stations">
+            <h2>Charging Stations</h2>
+            <ul id="station-list"></ul>
+        </section>
+        <section id="charging-history">
+            <h2>Charging History</h2>
+            <ul id="history-list"></ul>
+        </section>
+    </main>
+    <script type="module" src="index.js"></script>
+</body>
+</html>
